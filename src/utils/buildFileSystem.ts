@@ -1,11 +1,12 @@
 interface FileSystemItem {
   name: string;
   type: 'file' | 'folder';
+  prefix: string;
   items?: FileSystemItem[];
 }
 
 export const buildFileSystem = (files: string[]): FileSystemItem => {
-  const root: FileSystemItem = { name: '', type: 'folder' };
+  const root: FileSystemItem = { name: 'interview-task-z-iliev', prefix: '', type: 'folder' };
 
   files.reduce((currentLevel, path) => {
     const pathParts = path.split('/').filter((part) => !!part);
@@ -20,7 +21,7 @@ export const buildFileSystem = (files: string[]): FileSystemItem => {
       let item = nextLevel?.items?.find((item) => item.name === part && item.type === type);
 
       if (!item) {
-        item = { name: part, type };
+        item = { name: part, type, prefix: path };
 
         if (type === 'folder') {
           item.items = [];

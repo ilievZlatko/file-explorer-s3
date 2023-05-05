@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import S3Service from './services/S3Service';
 import { buildFileSystem } from './utils/buildFileSystem';
+import Initial from './pages/Initial';
+import Explorer from './pages/Explorer';
 
 const client = S3Service.getInstance(
   { accessKeyId: 'AKIAZ5RCAHL6MCK3ISU3', secretAccessKey: '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' },
@@ -10,6 +13,7 @@ const client = S3Service.getInstance(
 
 const params = {
   Bucket: 'interview-task-z-iliev',
+  Prefix: '',
 };
 
 function App() {
@@ -41,10 +45,12 @@ function App() {
   };
 
   return (
-    <div className="App">
-      App is working
-      <button onClick={handleFolderCreate}>create folder</button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Initial />} />
+        <Route path="/explorer" element={<Explorer />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
