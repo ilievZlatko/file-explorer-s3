@@ -1,3 +1,5 @@
+import { bucketName } from '../keys';
+
 interface FileSystemItem {
   name: string;
   type: 'file' | 'folder';
@@ -6,7 +8,7 @@ interface FileSystemItem {
 }
 
 export const buildFileSystem = (files: string[]): FileSystemItem => {
-  const root: FileSystemItem = { name: 'interview-task-z-iliev', prefix: '', type: 'folder' };
+  const root: FileSystemItem = { name: bucketName, prefix: '', type: 'folder' };
 
   files.reduce((currentLevel, path) => {
     const pathParts = path.split('/').filter((part) => !!part);

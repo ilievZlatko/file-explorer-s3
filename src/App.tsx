@@ -5,14 +5,12 @@ import S3Service from './services/S3Service';
 import { buildFileSystem } from './utils/buildFileSystem';
 import Initial from './pages/Initial';
 import Explorer from './pages/Explorer';
+import { accessKeyId, bucketName, region, secretAccessKey } from './keys';
 
-const client = S3Service.getInstance(
-  { accessKeyId: 'AKIAZ5RCAHL6MCK3ISU3', secretAccessKey: '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' },
-  'eu-central-1'
-);
+const client = S3Service.getInstance({ accessKeyId, secretAccessKey }, region);
 
 const params = {
-  Bucket: 'interview-task-z-iliev',
+  Bucket: bucketName,
   Prefix: '',
 };
 
@@ -34,7 +32,7 @@ function App() {
 
   const handleFolderCreate = async () => {
     const createFolderParams = {
-      Bucket: 'interview-task-z-iliev',
+      Bucket: bucketName,
       Key: 'test2/mock/mock2',
     };
 
