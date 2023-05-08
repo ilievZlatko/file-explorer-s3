@@ -15,7 +15,7 @@ interface DirectoryProps {
   files: FileSystemItem;
 }
 
-const Directory: React.FC<DirectoryProps> = ({ files }) => {
+export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const contextMenuRef = useRef<HTMLUListElement>(null);
@@ -27,15 +27,15 @@ const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const contextItems = [
     {
       label: 'New Folder',
-      icon: <FaFolderPlus style={{ fontSize: '18px' }} color={theme.colors.primary} />,
+      icon: <FaFolderPlus fontSize="16px" color={theme.colors.primary} />,
     },
     {
       label: 'New File',
-      icon: <FaFileMedical style={{ fontSize: '18px' }} color={theme.colors.primary} />,
+      icon: <FaFileMedical fontSize="16px" color={theme.colors.primary} />,
     },
     {
       label: 'Delete Folder/File',
-      icon: <FaFolderMinus style={{ fontSize: '18px' }} color={theme.colors.red} />,
+      icon: <FaFolderMinus fontSize="16px" color={theme.colors.red} />,
     },
   ];
 
@@ -62,11 +62,12 @@ const Directory: React.FC<DirectoryProps> = ({ files }) => {
         <Text
           onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
           onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
-          color={theme.colors.tertiaryText}
+          color={theme.colors.primaryText}
           style={{
             backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
             padding: '4px',
             borderRadius: theme.spacing.sm,
+            cursor: 'pointer',
           }}
         >
           {isExpanded ? (
@@ -95,20 +96,21 @@ const Directory: React.FC<DirectoryProps> = ({ files }) => {
 
   return (
     <File>
+      {showContext && <ContextMenu ref={contextMenuRef} items={[contextItems[2]]} onSelect={handleSelect} />}
       <Text
         onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
         onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
-        color={theme.colors.tertiaryText}
+        color={theme.colors.primaryText}
         style={{
           backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
           padding: '4px',
           borderRadius: theme.spacing.sm,
+          cursor: 'pointer',
+          width: '100%',
         }}
       >
-        <BsFiletypeTsx style={{ cursor: 'pointer' }} color={theme.colors.primary} fontSize="24px" /> {files.name}
+        <BsFiletypeTsx style={{ cursor: 'pointer' }} color={theme.colors.primary} fontSize="22px" /> {files.name}
       </Text>
     </File>
   );
 };
-
-export default Directory;

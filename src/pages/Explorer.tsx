@@ -1,8 +1,7 @@
 import React from 'react';
-import Directory from '../components/Directory';
+import { Directory, Sidebar } from '../components';
 import { Contents } from '../keys/data';
 import { buildFileSystem } from '../utils/buildFileSystem';
-import Sidebar from '../components/Sidebar';
 
 const Explorer = () => {
   return (

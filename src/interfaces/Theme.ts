@@ -10,11 +10,17 @@ export interface Colors {
   green: string;
   purple: string;
   blue: string;
+  yellow: string;
   lightRed: string;
   lightGreen: string;
   lightPurple: string;
   lightBlue: string;
   white: string;
+  grayScaleGray1: string;
+  grayScaleGray2: string;
+  grayScaleGray3: string;
+  grayScaleGray4: string;
+  grayScaleGray5: string;
 }
 
 export interface Breakpoints {

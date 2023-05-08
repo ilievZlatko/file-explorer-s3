@@ -6,7 +6,6 @@ export const Folder = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
   flex-direction: column;
   padding-left: ${({ theme }) => theme.spacing.md};
-  width: fit-content;
   width: 100%;
 `;
 
