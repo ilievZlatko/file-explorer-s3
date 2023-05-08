@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
+import { ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import S3Service from './services/S3Service';
 import { buildFileSystem } from './utils/buildFileSystem';
@@ -14,7 +14,7 @@ const params = {
   Prefix: '',
 };
 
-function App() {
+const App = () => {
   const getBucket = async () => {
     const command = new ListObjectsV2Command(params);
     const { Contents } = await client.send(command);
@@ -30,18 +30,6 @@ function App() {
     getBucket();
   }, []);
 
-  const handleFolderCreate = async () => {
-    const createFolderParams = {
-      Bucket: bucketName,
-      Key: 'test2/mock/mock2',
-    };
-
-    const command = new PutObjectCommand(createFolderParams);
-    const response = await client.send(command);
-
-    console.log(response);
-  };
-
   return (
     <BrowserRouter>
       <Routes>
@@ -50,6 +38,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

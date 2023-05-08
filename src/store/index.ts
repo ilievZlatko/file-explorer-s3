@@ -11,5 +11,5 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
 export const store = createStore();
 setupListeners(store.dispatch);
 
-export type AppDispatcher = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

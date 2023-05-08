@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import counterSlice from '../slices/counterSlice';
+import fileTreeReducer from '../slices/fileTreeSlice';
 
 const reducers = combineReducers({
-  counter: counterSlice,
+  fileTree: fileTreeReducer,
 });
 
 export default reducers;

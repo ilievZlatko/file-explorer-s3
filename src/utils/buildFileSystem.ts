@@ -1,11 +1,5 @@
+import { FileSystemItem } from '../interfaces/FileSystemItem';
 import { bucketName } from '../keys';
-
-interface FileSystemItem {
-  name: string;
-  type: 'file' | 'folder';
-  prefix: string;
-  items?: FileSystemItem[];
-}
 
 export const buildFileSystem = (files: string[]): FileSystemItem => {
   const root: FileSystemItem = { name: bucketName, prefix: '', type: 'folder' };

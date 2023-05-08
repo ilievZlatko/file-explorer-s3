@@ -5,8 +5,9 @@ import PoppinsRegular from '../fonts/Poppins-Regular.ttf';
 import PoppinsMedium from '../fonts/Poppins-Medium.ttf';
 import PoppinsSemiBold from '../fonts/Poppins-SemiBold.ttf';
 import PoppinsBold from '../fonts/Poppins-Bold.ttf';
+import { Theme } from '../interfaces/Theme';
 
-export default createGlobalStyle`
+export default createGlobalStyle<{ theme: Theme }>`
   /* FONTS */
   @font-face {
     font-family: 'Poppins';
@@ -41,6 +42,10 @@ export default createGlobalStyle`
     font-style: normal;
     font-weight: 700;
     src: url(${PoppinsBold}) format('truetype');
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   html, body, div, span, applet, object, iframe,
