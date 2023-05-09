@@ -1,8 +1,7 @@
 import { FileSystemItem } from '../interfaces/FileSystemItem';
-import { bucketName } from '../keys';
 
 export const buildFileSystem = (files: string[]): FileSystemItem => {
-  const root: FileSystemItem = { name: bucketName, prefix: '', type: 'folder' };
+  const root: FileSystemItem = { name: String(sessionStorage.getItem('bucketName')), prefix: '', type: 'folder' };
 
   files.reduce((currentLevel, path) => {
     const pathParts = path.split('/').filter((part) => !!part);

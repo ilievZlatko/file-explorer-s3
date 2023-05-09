@@ -7,6 +7,7 @@ import {
   DeleteObjectCommandInput,
 } from '@aws-sdk/client-s3';
 import S3Service from './S3Service';
+import { buildFileSystem } from '../utils/buildFileSystem';
 
 const getClient = () => {
   const credentialsRaw = sessionStorage.getItem('credentials');
@@ -26,7 +27,7 @@ export const getBucket = async (params: ListObjectsV2CommandInput) => {
   if (client) {
     const command = new ListObjectsV2Command(params);
     const response = await client.send(command);
-    return response;
+    return buildFileSystem(response?.Contents as string[]);
   }
 
   throw new Error('No valid credentials provided for client.');

@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Directory, Sidebar } from '../components';
-import { Contents } from '../keys/data';
-import { buildFileSystem } from '../utils/buildFileSystem';
+import { FileSystemItem } from '../interfaces/FileSystemItem';
+import { getBucket } from '../services/ApiClient';
 
 const Explorer = () => {
+  const [bucket, setBucket] = useState<FileSystemItem | null>(null);
+
+  const fetchBucket = async () => {
+    const resposne = await getBucket({
+      Bucket: String(sessionStorage.getItem('bucket')),
+    });
+
+    setBucket(resposne);
+  };
+
+  useEffect(() => {
+    fetchBucket();
+  }, []);
+
   return (
     <div>
-      <Sidebar>
-        <Directory files={buildFileSystem(Contents)} />
-      </Sidebar>
+      <Sidebar>{bucket && <Directory files={bucket} />}</Sidebar>
     </div>
   );
 };
