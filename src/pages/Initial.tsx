@@ -178,7 +178,7 @@ const Initial = () => {
             )}
           />
         </div>
-        <Button appearance="primary" label="Button" type="submit" style={{ marginTop: '24px' }} />
+        <Button appearance="primary" label="Submit" type="submit" style={{ marginTop: '24px' }} />
       </Form>
     </InitialPageContainer>
   );
