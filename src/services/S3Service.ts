@@ -12,6 +12,10 @@ class S3Singleton {
     }
     return S3Singleton.instance;
   }
+
+  // static setCredentials(credentials: { accessKeyId: string; secretAccessKey: string }, region: string) {
+  //   this.instance.config.credentials
+  // };
 }
 
 export default S3Singleton;

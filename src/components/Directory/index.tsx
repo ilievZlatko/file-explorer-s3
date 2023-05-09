@@ -6,11 +6,11 @@ import { FileSystemItem } from '../../interfaces/FileSystemItem';
 import { File, Folder } from './Directory.style';
 import { Text } from '../Text';
 import { useTheme } from 'styled-components';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { useDispatch } from 'react-redux';
-import { setSelectedFile } from '../../store/slices/fileTreeSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppSelector';
+import { createNewFolder, setSelectedFile } from '../../store/slices/fileTreeSlice';
 import { ContextMenu } from '../ContextMenu';
 import { useClickAway } from '../../hooks/useClickAway';
+import { deleteFolder } from '../../services/ApiClient';
 
 interface DirectoryProps {
   files: FileSystemItem;
@@ -18,7 +18,7 @@ interface DirectoryProps {
 
 export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const contextMenuRef = useRef<HTMLUListElement>(null);
   const [isExpanded, toggleExpanded] = useState(false);
   const [showContext, setShowContext] = useState(false);
@@ -51,8 +51,25 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
 
   const handleSelect = (event: string) => {
     if (currentPrefix) {
+      if (event === 'delete') {
+        deleteFolder({
+          Bucket: sessionStorage.getItem('bucketName') as string,
+          Key: currentPrefix,
+        });
+      }
+
+      if (event === 'create-folder') {
+        dispatch(
+          createNewFolder({
+            Bucket: sessionStorage.getItem('bucketName') as string,
+            Key: 'NewFolder/',
+          })
+        );
+      }
+
+      if (event === 'create-file') {
+      }
       setShowContext(false);
-      console.log({ currentPrefix, event });
     }
   };
 

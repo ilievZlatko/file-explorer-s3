@@ -1,21 +1,29 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { useTheme } from 'styled-components';
 import { FaFolder } from 'react-icons/fa';
 import { BsFiletypeTsx } from 'react-icons/bs';
 import { Text } from '../Text';
 import { FileExplorerContainer, FileItem, ItemsContainer } from './FileExplorer.style';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { getBucket } from '../../services/ApiClient';
 
 export const FileExplorer = () => {
   const theme = useTheme();
-  const files = [
-    { name: 'Sub Folder 2', type: 'folder', prefix: 'test3/folder1/subfolder2/', items: [] },
-    { name: 'Sub Folder 3', type: 'folder', prefix: 'test3/folder1/subfolder3/', items: [] },
-    { name: 'Sub Folder 4', type: 'folder', prefix: 'test3/folder1/subfolder4/', items: [] },
-    { name: 'Sub Folder 5', type: 'folder', prefix: 'test3/folder1/subfolder5/', items: [] },
-    { name: 'Sub Folder 6', type: 'folder', prefix: 'test3/folder1/subfolder6/', items: [] },
-    { name: 'Sub Folder 7', type: 'folder', prefix: 'test3/folder1/subfolder7/', items: [] },
-    { name: 'File Name 1', type: 'file', prefix: 'test3/folder1/subfolder7/file-name1' },
-  ];
+  const { selectedFile, files } = useAppSelector((state) => state.fileTree);
+
+  const fetchBucket = async () => {
+    const response = await getBucket({
+      Bucket: sessionStorage.getItem('bucketName') as string,
+      Delimiter: '/',
+      Prefix: `${selectedFile}`,
+    });
+  };
+
+  useEffect(() => {
+    if (selectedFile) {
+      fetchBucket();
+    }
+  }, [selectedFile]);
 
   return (
     <FileExplorerContainer>
@@ -24,25 +32,27 @@ export const FileExplorer = () => {
       </Text>
 
       <ItemsContainer>
-        {files.map((file) => (
-          <FileItem key={file.prefix}>
-            {file.type === 'folder' ? (
-              <FaFolder
-                color={theme.colors.primary}
-                size="60%"
-                style={{
-                  cursor: 'pointer',
-                }}
-              />
-            ) : (
-              <BsFiletypeTsx style={{ cursor: 'pointer' }} color={theme.colors.primary} size="60%" />
-            )}
+        {files &&
+          files?.items?.[0]?.items &&
+          files?.items?.[0]?.items?.map((file) => (
+            <FileItem key={file.prefix}>
+              {file.type === 'folder' ? (
+                <FaFolder
+                  color={theme.colors.primary}
+                  size="60%"
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                />
+              ) : (
+                <BsFiletypeTsx style={{ cursor: 'pointer' }} color={theme.colors.primary} size="60%" />
+              )}
 
-            <Text variant="p2" tag="span" wordWrap="break-word">
-              {file.name}
-            </Text>
-          </FileItem>
-        ))}
+              <Text variant="p2" tag="span" wordWrap="break-word">
+                {file.name}
+              </Text>
+            </FileItem>
+          ))}
       </ItemsContainer>
     </FileExplorerContainer>
   );

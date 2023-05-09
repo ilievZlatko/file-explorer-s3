@@ -19,7 +19,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
-  padding: 28px;
+  padding: 40px 28px;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   border-radius: 10px;

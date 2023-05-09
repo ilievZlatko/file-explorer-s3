@@ -4,7 +4,7 @@ export const buildFileSystem = (files: string[]): FileSystemItem => {
   const root: FileSystemItem = { name: String(sessionStorage.getItem('bucketName')), prefix: '', type: 'folder' };
 
   files.reduce((currentLevel, path) => {
-    const pathParts = path.split('/').filter((part) => !!part);
+    const pathParts = path?.split('/').filter((part) => !!part);
     let nextLevel: FileSystemItem | undefined = currentLevel;
 
     pathParts.forEach((part, i) => {
