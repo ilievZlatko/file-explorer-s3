@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { off, on } from '../utils/events';
 
 export const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState<{
@@ -14,12 +15,12 @@ export const useScreenSize = () => {
       });
     };
 
-    window.addEventListener('resize', handleResize);
+    on(window, 'resize', handleResize);
     // Call handler right away so state gets updated with initial window size
     handleResize();
 
     // Don't forget to clean up after yourself ;)
-    return () => window.removeEventListener('resize', handleResize);
+    return () => off(window, 'resize', handleResize);
   }, []);
 
   return screenSize;

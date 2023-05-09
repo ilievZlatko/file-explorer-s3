@@ -17,9 +17,11 @@ export const useClickAway = <E extends Event = Event>(
       const { current: el } = ref;
       el && !el.contains(event.target) && savedCallback.current(event);
     };
+
     for (const eventName of events) {
       on(document, eventName, handler);
     }
+
     return () => {
       for (const eventName of events) {
         off(document, eventName, handler);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { off, on } from '../../utils/events';
 
 interface PrivateRouteProps {
   children: React.ReactElement;
@@ -28,10 +29,10 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }): JSX.Ele
       setIsAuthenticated(isAuthenticated);
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    on(window, 'storage', handleStorageChange);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      off(window, 'storage', handleStorageChange);
     };
   }, [location.pathname]);
 
