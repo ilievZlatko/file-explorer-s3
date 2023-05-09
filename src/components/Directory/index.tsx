@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { FaFolder, FaFolderOpen, FaFolderPlus, FaFolderMinus, FaFileMedical } from 'react-icons/fa';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
+import { VscNewFolder, VscNewFile, VscTrash } from 'react-icons/vsc';
 import { BsFiletypeTsx } from 'react-icons/bs';
 import { FileSystemItem } from '../../interfaces/FileSystemItem';
 import { File, Folder } from './Directory.style';
@@ -27,15 +28,18 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const contextItems = [
     {
       label: 'New Folder',
-      icon: <FaFolderPlus fontSize="16px" color={theme.colors.primary} />,
+      event: 'create-folder',
+      icon: <VscNewFolder fontSize="18px" color={theme.colors.primary} />,
     },
     {
       label: 'New File',
-      icon: <FaFileMedical fontSize="16px" color={theme.colors.primary} />,
+      event: 'create-file',
+      icon: <VscNewFile fontSize="18px" color={theme.colors.primary} />,
     },
     {
       label: 'Delete Folder/File',
-      icon: <FaFolderMinus fontSize="16px" color={theme.colors.red} />,
+      event: 'delete',
+      icon: <VscTrash fontSize="18px" color={theme.colors.red} />,
     },
   ];
 
@@ -45,9 +49,10 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     setShowContext(true);
   };
 
-  const handleSelect = () => {
+  const handleSelect = (event: string) => {
     if (currentPrefix) {
-      // setShowContext(false);
+      setShowContext(false);
+      console.log({ currentPrefix, event });
     }
   };
 

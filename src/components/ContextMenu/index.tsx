@@ -5,24 +5,30 @@ import ContextMenuItem from './ContextMenuItem';
 interface ContextMenuProps {
   items: Array<{
     label: string;
+    event: string;
     icon?: React.ReactNode;
   }>;
-  onSelect: () => void;
+  onSelect: (event: string) => void;
 }
 
 export const ContextMenu = React.forwardRef<HTMLUListElement, ContextMenuProps>((props, ref) => {
   const { items, onSelect } = props;
 
-  const handleSelect = (e: React.MouseEvent<HTMLLIElement>) => {
+  const handleSelect = (event: string, e: React.MouseEvent<HTMLLIElement>) => {
     e.stopPropagation();
-    onSelect();
+    onSelect(event);
   };
 
   return (
     <ContextMenuWrapper ref={ref}>
-      <ul></ul>
       {items.map((item) => (
-        <ContextMenuItem icon={item.icon} label={item.label} onClick={handleSelect} key={item.label} />
+        <ContextMenuItem
+          icon={item.icon}
+          label={item.label}
+          event={item.event}
+          onClick={(event: string, e: React.MouseEvent<HTMLLIElement>) => handleSelect(event, e)}
+          key={item.label}
+        />
       ))}
     </ContextMenuWrapper>
   );

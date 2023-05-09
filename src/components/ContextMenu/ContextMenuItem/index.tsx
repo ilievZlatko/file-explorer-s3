@@ -4,12 +4,13 @@ import { MenuItem } from './ContextMenuItem.style';
 interface ContextMenuItemProps {
   label: string;
   icon?: React.ReactNode;
-  onClick: (e: React.MouseEvent<HTMLLIElement>) => void;
+  event: string;
+  onClick: (event: string, e: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-const ContextMenuItem: React.FC<ContextMenuItemProps> = ({ label, icon, onClick }) => {
+const ContextMenuItem: React.FC<ContextMenuItemProps> = ({ label, icon, event, onClick }) => {
   return (
-    <MenuItem onClick={onClick}>
+    <MenuItem onClick={(e) => onClick(event, e)}>
       {icon && icon}
       {label}
     </MenuItem>

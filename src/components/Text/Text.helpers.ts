@@ -49,7 +49,7 @@ export const textVariants = (variant: Variant = 'p1') =>
   `,
     message: `
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 300;
     line-height: 16px;
   `,
   }[variant]);

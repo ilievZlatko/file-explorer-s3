@@ -6,6 +6,7 @@ import { buildFileSystem } from './utils/buildFileSystem';
 import Initial from './pages/Initial';
 import Explorer from './pages/Explorer';
 import { accessKeyId, bucketName, region, secretAccessKey } from './keys';
+import { PrivateRoute } from './components';
 
 const client = S3Service.getInstance({ accessKeyId, secretAccessKey }, region);
 
@@ -18,8 +19,8 @@ const App = () => {
   const getBucket = async () => {
     const command = new ListObjectsV2Command(params);
     const { Contents } = await client.send(command);
-    console.log(Contents);
     const contentKeys = Contents?.map((c) => c.Key);
+
     if (contentKeys && Array.isArray(contentKeys) && contentKeys.length > 0) {
       const fileSystem = buildFileSystem(contentKeys as string[]);
       console.log(fileSystem);
@@ -34,7 +35,14 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Initial />} />
-        <Route path="/explorer" element={<Explorer />} />
+        <Route
+          path="/explorer"
+          element={
+            <PrivateRoute>
+              <Explorer />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
