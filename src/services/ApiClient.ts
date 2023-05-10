@@ -5,6 +5,8 @@ import {
   PutObjectCommandInput,
   DeleteObjectCommand,
   DeleteObjectCommandInput,
+  GetObjectCommand,
+  GetObjectCommandInput,
 } from '@aws-sdk/client-s3';
 import S3Service from './S3Service';
 
@@ -30,6 +32,20 @@ export const getBucket = async (params: ListObjectsV2CommandInput) => {
     const response = await client.send(command);
 
     return response;
+  }
+
+  throw new Error('No valid credentials provided for client.');
+};
+
+export const getFileContent = async (params: GetObjectCommandInput) => {
+  const client = getClient();
+
+  if (client) {
+    const command = new GetObjectCommand(params);
+    const response = await client.send(command);
+    const body = await response?.Body?.transformToString();
+
+    return body;
   }
 
   throw new Error('No valid credentials provided for client.');

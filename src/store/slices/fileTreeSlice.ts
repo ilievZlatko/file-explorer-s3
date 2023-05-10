@@ -1,11 +1,12 @@
-import { ListObjectsV2CommandInput, PutObjectCommandInput } from '@aws-sdk/client-s3';
+import { GetObjectCommandInput, ListObjectsV2CommandInput, PutObjectCommandInput } from '@aws-sdk/client-s3';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createFolder, getBucket } from '../../services/ApiClient';
+import { createFolder, getBucket, getFileContent } from '../../services/ApiClient';
 import { FileSystemItem } from '../../interfaces/FileSystemItem';
 import { buildFileSystem } from '../../utils/buildFileSystem';
 
 export interface State {
   selectedFile: FileSystemItem | null;
+  selectedFileContent: string | null;
   files: FileSystemItem | null;
   error: string | null;
   status: 'idle' | 'loading' | 'complete' | 'rejected';
@@ -13,6 +14,7 @@ export interface State {
 
 export const initialState: State = {
   selectedFile: null,
+  selectedFileContent: null,
   files: null,
   error: null,
   status: 'idle',
@@ -25,6 +27,11 @@ export const fetchBucket = createAsyncThunk('fileTree/fetchBucket', async (param
 
 export const createNewFolder = createAsyncThunk('fileTree/createFolder', async (params: PutObjectCommandInput) => {
   const response = await createFolder(params);
+  return response;
+});
+
+export const fetchFileContent = createAsyncThunk('fileTree/fetchFileContent', async (params: GetObjectCommandInput) => {
+  const response = await getFileContent(params);
   return response;
 });
 
@@ -67,6 +74,17 @@ export const fileTreeSlice = createSlice({
     builder.addCase(createNewFolder.rejected, (state, { payload }) => {
       if (payload) state.error = String(payload) ?? 'Something went wrong';
       state.status = 'rejected';
+    });
+
+    builder.addCase(fetchFileContent.pending, (state) => {
+      state.error = null;
+      state.status = 'loading';
+    });
+
+    builder.addCase(fetchFileContent.fulfilled, (state, { payload }) => {
+      state.error = null;
+      state.status = 'complete';
+      state.selectedFileContent = String(payload);
     });
   },
 });

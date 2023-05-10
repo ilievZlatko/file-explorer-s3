@@ -8,8 +8,8 @@ import { Empty } from '../Empty';
 import { Modal } from '../Modal';
 import { Input } from '../Input';
 import { Button } from '../Button';
-import { useState } from 'react';
-import { createNewFolder, fetchBucket } from '../../store/slices/fileTreeSlice';
+import { useEffect, useState } from 'react';
+import { createNewFolder, fetchBucket, fetchFileContent } from '../../store/slices/fileTreeSlice';
 
 export const FileExplorer = () => {
   const theme = useTheme();
@@ -18,7 +18,7 @@ export const FileExplorer = () => {
   const [folderName, setFolderName] = useState('');
 
   const dispatch = useAppDispatch();
-  const { selectedFile } = useAppSelector((state) => state.fileTree);
+  const { selectedFile, selectedFileContent } = useAppSelector((state) => state.fileTree);
 
   const handleNewFolderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +35,17 @@ export const FileExplorer = () => {
     setFolderName('');
     setIsFolderModalOpen(false);
   };
+
+  useEffect(() => {
+    if (selectedFile?.type === 'file') {
+      dispatch(
+        fetchFileContent({
+          Bucket: String(sessionStorage.getItem('bucketName')),
+          Key: selectedFile?.prefix,
+        })
+      );
+    }
+  }, [selectedFile?.type, dispatch]);
 
   return (
     <FileExplorerContainer>
@@ -111,6 +122,8 @@ export const FileExplorer = () => {
           Select file or folder
         </Text>
       )}
+
+      {selectedFileContent && <Text>{selectedFileContent}</Text>}
     </FileExplorerContainer>
   );
 };
