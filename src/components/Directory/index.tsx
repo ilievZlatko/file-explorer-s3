@@ -26,8 +26,12 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const [isExpanded, toggleExpanded] = useState(false);
   const [showContext, setShowContext] = useState(false);
   const [currentPrefix, setCurrentPrefix] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [folderName, setFolderName] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [fileBody, setFileBody] = useState('');
+
   const { selectedFile } = useAppSelector((state) => state.fileTree);
 
   const contextItems = [
@@ -66,11 +70,13 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
       }
 
       if (event === 'create-folder') {
-        setIsModalOpen(true);
+        setIsFolderModalOpen(true);
       }
 
       if (event === 'create-file') {
+        setIsFileModalOpen(true);
       }
+
       setShowContext(false);
     }
   };
@@ -81,14 +87,32 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     await dispatch(
       createNewFolder({
         Bucket: sessionStorage.getItem('bucketName') as string,
-        Key: `${currentPrefix}/${folderName}/`,
+        Key: `${currentPrefix}${folderName}/`,
       })
     );
 
     await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
 
-    setIsModalOpen(false);
     setFolderName('');
+    setIsFolderModalOpen(false);
+  };
+
+  const handleNewFileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await dispatch(
+      createNewFolder({
+        Bucket: sessionStorage.getItem('bucketName') as string,
+        Key: `${currentPrefix}${fileName}`,
+        Body: fileBody,
+      })
+    );
+
+    await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
+
+    setFileName('');
+    setFileBody('');
+    setIsFileModalOpen(false);
   };
 
   useClickAway(contextMenuRef, () => {
@@ -99,8 +123,8 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     return (
       <>
         <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isFolderModalOpen}
+          onClose={() => setIsFolderModalOpen(false)}
           alignTitle="center"
           layout="WindowModal"
           title="New Folder Name"
@@ -124,6 +148,45 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
               placeholder="New folder..."
               value={folderName}
               onChange={(e) => setFolderName(e.target.value)}
+            />
+            <Button fullWidth>Save</Button>
+          </form>
+        </Modal>
+
+        <Modal
+          isOpen={isFileModalOpen}
+          onClose={() => setIsFileModalOpen(false)}
+          alignTitle="center"
+          layout="WindowModal"
+          title="New Folder Name"
+          subtitle="Enter name for your new folder below."
+        >
+          <form
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '30px',
+              width: '100%',
+              paddingInline: '30px',
+              paddingBottom: '24px',
+            }}
+            onSubmit={handleNewFileSubmit}
+          >
+            <Input
+              fullWidth
+              label="File name"
+              required
+              placeholder="New File.txt"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+            />
+            <Input
+              fullWidth
+              label="File body"
+              required
+              placeholder="Free text..."
+              value={fileBody}
+              onChange={(e) => setFileBody(e.target.value)}
             />
             <Button fullWidth>Save</Button>
           </form>
