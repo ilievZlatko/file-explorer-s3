@@ -124,7 +124,9 @@ export const FileExplorer = () => {
         </Text>
       )}
 
-      {selectedFile && selectedFile?.type === 'file' && selectedFileContent && <Text>{selectedFileContent}</Text>}
+      {selectedFile && selectedFile?.type === 'file' && selectedFileContent && (
+        <Text wordWrap="break-word">{selectedFileContent}</Text>
+      )}
     </FileExplorerContainer>
   );
 };

@@ -15,7 +15,7 @@ export const StyledText = styled.div<TextProps>`
     word-wrap: ${wordWrap};
     text-aligh: ${textAlign};
     user-select: none;
-    width: max-content;
+    width: fit-content;
 
     ${textVariants(variant)}
   `}
