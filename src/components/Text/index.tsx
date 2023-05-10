@@ -17,11 +17,12 @@ export const Text: React.FC<PropsWithChildren<TextProps>> = ({
   color,
   variant = 'p1',
   children,
+  textAlign = 'left',
   wordWrap = 'normal',
   ...rest
 }) => {
   return (
-    <StyledText as={tag} color={color} variant={variant} wordWrap={wordWrap} {...rest}>
+    <StyledText as={tag} color={color} variant={variant} wordWrap={wordWrap} textAlign={textAlign} {...rest}>
       {children}
     </StyledText>
   );

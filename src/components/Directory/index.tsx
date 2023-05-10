@@ -7,10 +7,13 @@ import { File, Folder } from './Directory.style';
 import { Text } from '../Text';
 import { useTheme } from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppSelector';
-import { createNewFolder, setSelectedFile } from '../../store/slices/fileTreeSlice';
+import { createNewFolder, fetchBucket, setSelectedFile } from '../../store/slices/fileTreeSlice';
 import { ContextMenu } from '../ContextMenu';
 import { useClickAway } from '../../hooks/useClickAway';
 import { deleteFolder } from '../../services/ApiClient';
+import { Modal } from '../Modal';
+import { Input } from '../Input';
+import { Button } from '../Button';
 
 interface DirectoryProps {
   files: FileSystemItem;
@@ -23,6 +26,8 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const [isExpanded, toggleExpanded] = useState(false);
   const [showContext, setShowContext] = useState(false);
   const [currentPrefix, setCurrentPrefix] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [folderName, setFolderName] = useState('');
   const { selectedFile } = useAppSelector((state) => state.fileTree);
 
   const contextItems = [
@@ -49,22 +54,19 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     setShowContext(true);
   };
 
-  const handleSelect = (event: string) => {
+  const handleSelect = async (event: string) => {
     if (currentPrefix) {
       if (event === 'delete') {
-        deleteFolder({
+        await deleteFolder({
           Bucket: sessionStorage.getItem('bucketName') as string,
           Key: currentPrefix,
         });
+
+        await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
       }
 
       if (event === 'create-folder') {
-        dispatch(
-          createNewFolder({
-            Bucket: sessionStorage.getItem('bucketName') as string,
-            Key: 'NewFolder/',
-          })
-        );
+        setIsModalOpen(true);
       }
 
       if (event === 'create-file') {
@@ -73,46 +75,95 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     }
   };
 
+  const handleNewFolderSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await dispatch(
+      createNewFolder({
+        Bucket: sessionStorage.getItem('bucketName') as string,
+        Key: `${currentPrefix}/${folderName}/`,
+      })
+    );
+
+    await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
+
+    setIsModalOpen(false);
+    setFolderName('');
+  };
+
   useClickAway(contextMenuRef, () => {
     setShowContext(false);
   });
 
   if (files.type === 'folder') {
     return (
-      <Folder onClick={() => setShowContext(false)}>
-        {showContext && <ContextMenu ref={contextMenuRef} items={contextItems} onSelect={handleSelect} />}
-        <Text
-          onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
-          onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
-          color={theme.colors.primaryText}
-          style={{
-            backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
-            padding: '4px',
-            borderRadius: theme.spacing.sm,
-            cursor: 'pointer',
-          }}
+      <>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          alignTitle="center"
+          layout="WindowModal"
+          title="New Folder Name"
+          subtitle="Enter name for your new folder below."
         >
-          {isExpanded ? (
-            <FaFolderOpen
-              color={theme.colors.primary}
-              fontSize="24px"
-              style={{ cursor: 'pointer' }}
-              onClick={() => toggleExpanded(!isExpanded)}
+          <form
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '30px',
+              width: '100%',
+              paddingInline: '30px',
+              paddingBottom: '24px',
+            }}
+            onSubmit={handleNewFolderSubmit}
+          >
+            <Input
+              fullWidth
+              label="Folder name"
+              required
+              placeholder="New folder..."
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
             />
-          ) : (
-            <FaFolder
-              color={theme.colors.primary}
-              fontSize="24px"
-              style={{ cursor: 'pointer' }}
-              onClick={() => toggleExpanded(!isExpanded)}
-            />
-          )}{' '}
-          {files.name}
-        </Text>
-        {isExpanded &&
-          files?.items &&
-          files?.items?.map((item: FileSystemItem) => <Directory files={item} key={item.prefix} />)}
-      </Folder>
+            <Button fullWidth>Save</Button>
+          </form>
+        </Modal>
+
+        <Folder onClick={() => setShowContext(false)}>
+          {showContext && <ContextMenu ref={contextMenuRef} items={contextItems} onSelect={handleSelect} />}
+          <Text
+            onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
+            onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
+            color={theme.colors.primaryText}
+            style={{
+              backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
+              padding: '4px',
+              borderRadius: theme.spacing.sm,
+              cursor: 'pointer',
+            }}
+          >
+            {isExpanded ? (
+              <FaFolderOpen
+                color={theme.colors.primary}
+                fontSize="24px"
+                style={{ cursor: 'pointer' }}
+                onClick={() => toggleExpanded(!isExpanded)}
+              />
+            ) : (
+              <FaFolder
+                color={theme.colors.primary}
+                fontSize="24px"
+                style={{ cursor: 'pointer' }}
+                onClick={() => toggleExpanded(!isExpanded)}
+              />
+            )}{' '}
+            {files.name}
+          </Text>
+          {isExpanded &&
+            files?.items &&
+            files?.items?.map((item: FileSystemItem) => <Directory files={item} key={item.prefix} />)}
+        </Folder>
+      </>
     );
   }
 
