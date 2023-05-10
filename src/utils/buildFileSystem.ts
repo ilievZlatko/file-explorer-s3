@@ -5,6 +5,7 @@ export const buildFileSystem = (files: string[]): FileSystemItem => {
     name: String(sessionStorage.getItem('bucketName')),
     prefix: '/',
     type: 'folder',
+    items: [],
   };
 
   files?.reduce((currentLevel, path) => {

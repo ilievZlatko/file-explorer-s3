@@ -45,7 +45,7 @@ export const FileExplorer = () => {
         })
       );
     }
-  }, [selectedFile?.type, dispatch]);
+  }, [selectedFile?.type, selectedFile?.prefix, dispatch]);
 
   return (
     <FileExplorerContainer>
@@ -109,14 +109,13 @@ export const FileExplorer = () => {
         </ItemsContainer>
       )}
 
-      {(selectedFile && selectedFile?.items?.length === 0) ||
-        (selectedFile?.name === String(sessionStorage.getItem('bucketName')) && (
-          <Empty
-            message="This folder is empty"
-            actionText="Create New Folder"
-            onActionClick={() => setIsFolderModalOpen(true)}
-          />
-        ))}
+      {selectedFile && selectedFile?.items?.length === 0 && selectedFile?.type === 'folder' && (
+        <Empty
+          message="This folder is empty"
+          actionText="Create New Folder"
+          onActionClick={() => setIsFolderModalOpen(true)}
+        />
+      )}
 
       {!selectedFile && (
         <Text variant="h3" tag="h3" style={{ margin: 'auto auto' }} color={theme.colors.grayScaleGray3}>
