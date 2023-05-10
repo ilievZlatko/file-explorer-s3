@@ -10,7 +10,7 @@ interface ContextMenuItemProps {
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({ label, icon, event, onClick }) => {
   return (
-    <MenuItem onClick={(e) => onClick(event, e)}>
+    <MenuItem onClick={(e) => onClick(event, e)} data-testid="menu-item">
       {icon && icon}
       {label}
     </MenuItem>
