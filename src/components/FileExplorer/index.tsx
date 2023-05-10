@@ -109,13 +109,14 @@ export const FileExplorer = () => {
         </ItemsContainer>
       )}
 
-      {selectedFile && selectedFile?.items?.length === 0 && (
-        <Empty
-          message="This folder is empty"
-          actionText="Create New Folder"
-          onActionClick={() => setIsFolderModalOpen(true)}
-        />
-      )}
+      {(selectedFile && selectedFile?.items?.length === 0) ||
+        (selectedFile?.name === String(sessionStorage.getItem('bucketName')) && (
+          <Empty
+            message="This folder is empty"
+            actionText="Create New Folder"
+            onActionClick={() => setIsFolderModalOpen(true)}
+          />
+        ))}
 
       {!selectedFile && (
         <Text variant="h3" tag="h3" style={{ margin: 'auto auto' }} color={theme.colors.grayScaleGray3}>
