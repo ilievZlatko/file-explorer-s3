@@ -5,7 +5,7 @@ import { FileSystemItem } from '../../interfaces/FileSystemItem';
 import { buildFileSystem } from '../../utils/buildFileSystem';
 
 export interface State {
-  selectedFile: string | null;
+  selectedFile: FileSystemItem | null;
   files: FileSystemItem | null;
   error: string | null;
   status: 'idle' | 'loading' | 'complete' | 'rejected';
@@ -25,7 +25,6 @@ export const fetchBucket = createAsyncThunk('fileTree/fetchBucket', async (param
 
 export const createNewFolder = createAsyncThunk('fileTree/createFolder', async (params: PutObjectCommandInput) => {
   const response = await createFolder(params);
-  console.log(response);
   return response;
 });
 
@@ -33,8 +32,8 @@ export const fileTreeSlice = createSlice({
   name: 'fileTree',
   initialState,
   reducers: {
-    setSelectedFile(state, action) {
-      state.selectedFile = action.payload;
+    setSelectedFile(state, { payload }) {
+      state.selectedFile = payload;
     },
   },
   extraReducers: (builder) => {
@@ -61,13 +60,11 @@ export const fileTreeSlice = createSlice({
     });
 
     builder.addCase(createNewFolder.fulfilled, (state, { payload }) => {
-      console.log(payload);
       state.error = null;
       state.status = 'complete';
     });
 
     builder.addCase(createNewFolder.rejected, (state, { payload }) => {
-      console.log(payload);
       if (payload) state.error = String(payload) ?? 'Something went wrong';
       state.status = 'rejected';
     });

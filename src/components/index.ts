@@ -2,6 +2,7 @@ export * from './Button';
 export * from './ContextMenu';
 export * from './Directory';
 export * from './DotSpinner';
+export * from './Empty';
 export * from './FileExplorer';
 export * from './Input';
 export * from './PrivateRoute';

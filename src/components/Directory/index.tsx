@@ -195,11 +195,14 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
         <Folder onClick={() => setShowContext(false)}>
           {showContext && <ContextMenu ref={contextMenuRef} items={contextItems} onSelect={handleSelect} />}
           <Text
-            onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
+            onDoubleClick={() => dispatch(setSelectedFile(files))}
             onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
             color={theme.colors.primaryText}
             style={{
-              backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
+              backgroundColor:
+                selectedFile?.prefix === files.prefix && selectedFile?.name === files.name
+                  ? theme.colors.lightBlue
+                  : 'transparent',
               padding: '4px',
               borderRadius: theme.spacing.sm,
               cursor: 'pointer',
@@ -234,11 +237,14 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     <File>
       {showContext && <ContextMenu ref={contextMenuRef} items={[contextItems[2]]} onSelect={handleSelect} />}
       <Text
-        onDoubleClick={() => dispatch(setSelectedFile(files.prefix))}
+        onDoubleClick={() => dispatch(setSelectedFile(files))}
         onContextMenu={(e: React.MouseEvent) => handleContextClick(files.prefix, e)}
         color={theme.colors.primaryText}
         style={{
-          backgroundColor: selectedFile === files.prefix ? theme.colors.lightBlue : 'transparent',
+          backgroundColor:
+            selectedFile?.prefix === files.prefix && selectedFile?.name === files.name
+              ? theme.colors.lightBlue
+              : 'transparent',
           padding: '4px',
           borderRadius: theme.spacing.sm,
           cursor: 'pointer',
