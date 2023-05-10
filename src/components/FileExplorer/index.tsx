@@ -123,7 +123,7 @@ export const FileExplorer = () => {
         </Text>
       )}
 
-      {selectedFileContent && <Text>{selectedFileContent}</Text>}
+      {selectedFile && selectedFile?.type === 'file' && selectedFileContent && <Text>{selectedFileContent}</Text>}
     </FileExplorerContainer>
   );
 };
