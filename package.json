@@ -54,6 +54,7 @@
   "devDependencies": {
     "@types/react-transition-group": "^4.4.6",
     "@types/styled-components": "^5.1.26",
-    "@types/uuid": "^9.0.1"
+    "@types/uuid": "^9.0.1",
+    "jest-styled-components": "^7.1.1"
   }
 }

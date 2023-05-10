@@ -22,16 +22,6 @@ export const textVariants = (variant: Variant = 'p1') =>
     font-weight: 600;
     line-height: 24px;
   `,
-    h5: `
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 24px;
-  `,
-    h6: `
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-  `,
     p1: `
     font-size: 16px;
     font-weight: 400;

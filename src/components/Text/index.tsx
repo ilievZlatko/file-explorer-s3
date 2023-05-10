@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import { StyledText } from './Text.style';
 
-export type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2' | 'button' | 'message';
+export type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'p1' | 'p2' | 'button' | 'message';
 
 export interface TextProps
   extends React.HTMLAttributes<HTMLSpanElement | HTMLHeadingElement | HTMLParagraphElement | HTMLLabelElement> {
-  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'label';
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span' | 'label';
   variant?: Variant;
   wordWrap?: 'normal' | 'break-word' | 'initial' | 'inherit';
   textAlign?: 'left' | 'center' | 'right' | 'justify' | 'inherit' | 'initial';
