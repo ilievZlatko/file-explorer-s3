@@ -3,7 +3,7 @@ import { TextProps } from '.';
 import { textVariants } from './Text.helpers';
 
 export const StyledText = styled.div<TextProps>`
-  ${({ theme, color, variant = 'p1', wordWrap = 'normal', textAlign = 'left' }) => css`
+  ${({ theme, color, variant = 'p1', wordWrap = 'normal', textAlign }) => css`
     display: inline-flex;
     gap: ${({ theme }) => theme.spacing.sm};
     align-items: center;
@@ -13,7 +13,7 @@ export const StyledText = styled.div<TextProps>`
     color: ${color || theme.colors.primaryText};
     cursor: text;
     word-wrap: ${wordWrap};
-    text-aligh: ${textAlign};
+    text-align: ${textAlign};
     user-select: none;
     width: fit-content;
 

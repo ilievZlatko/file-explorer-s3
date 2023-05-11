@@ -28,6 +28,7 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const [currentPrefix, setCurrentPrefix] = useState<string | null>(null);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileBody, setFileBody] = useState('');
@@ -61,12 +62,7 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   const handleSelect = async (event: string) => {
     if (currentPrefix) {
       if (event === 'delete') {
-        await deleteFolder({
-          Bucket: sessionStorage.getItem('bucketName') as string,
-          Key: currentPrefix,
-        });
-
-        await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
+        setIsDeleteModalOpen(true);
       }
 
       if (event === 'create-folder') {
@@ -115,6 +111,19 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
     setIsFileModalOpen(false);
   };
 
+  const handleDelete = async () => {
+    if (currentPrefix) {
+      await deleteFolder({
+        Bucket: sessionStorage.getItem('bucketName') as string,
+        Key: currentPrefix,
+      });
+
+      await dispatch(fetchBucket({ Bucket: String(sessionStorage.getItem('bucketName')) }));
+    }
+
+    setIsDeleteModalOpen(false);
+  };
+
   useClickAway(contextMenuRef, () => {
     setShowContext(false);
   });
@@ -122,6 +131,14 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
   if (files.type === 'folder') {
     return (
       <>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleDelete}
+          title="Delete File/Folder?"
+          message={`This process cannot be reversed, and you will loose ${currentPrefix}. Do you want to continue?`}
+        ></Modal>
+
         <Modal
           isOpen={isFolderModalOpen}
           onClose={() => setIsFolderModalOpen(false)}

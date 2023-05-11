@@ -7,7 +7,7 @@ export const ConfirmModalLayoutWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 70%;
+  max-width: 350px;
   margin-inline: auto;
   margin-top: 50%;
 

@@ -31,7 +31,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       )}
       {message && (
         <ConfifmModalBody>
-          <Text variant="p1" tag="p" wordWrap="break-word">
+          <Text variant="p1" tag="p" wordWrap="break-word" textAlign="center">
             {message}
           </Text>
         </ConfifmModalBody>
