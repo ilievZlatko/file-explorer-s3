@@ -223,6 +223,7 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
               padding: '4px',
               borderRadius: theme.spacing.sm,
               cursor: 'pointer',
+              width: '100%',
             }}
           >
             {isExpanded ? (
