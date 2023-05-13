@@ -175,8 +175,8 @@ export const Directory: React.FC<DirectoryProps> = ({ files }) => {
           onClose={() => setIsFileModalOpen(false)}
           alignTitle="center"
           layout="WindowModal"
-          title="New Folder Name"
-          subtitle="Enter name for your new folder below."
+          title="New File Name"
+          subtitle="Enter name for your new file below."
         >
           <form
             style={{
